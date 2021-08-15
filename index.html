@@ -2,7 +2,7 @@
 <html>
     <header>
         <meta charset="utf-8">
-        <title>Week8 Twitch API</title>
+        <title>Week8 Twitch API project</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://necolas.github.io/normalize.css/latest/normalize.css"/>
     </header>
@@ -218,7 +218,7 @@
                         </div>
                     </div>
                     `
-            // 拿到最受歡迎的前五名遊戲並每次動態新增一遊戲到navbar_list（所以共新增五個）
+            // get the top-5 games every time and add them to the navigation bar
             var request = new XMLHttpRequest();
             request.open('GET', url + '/games/top?limit=5', true);
             request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
@@ -228,20 +228,18 @@
                     const games = JSON.parse(this.response);
                     var topGames = games.top.map((game) => game.game.name);
 
-                    //console.log('topGames', topGames); // ["League of Legends", "Just Chatting", "Grand Theft Auto V", "New World", "VALORANT"]
-
                     for (let game of topGames) {
                         let element = document.createElement('li');
                         element.innerHTML = game;
                         document.querySelector('.navbar_list').appendChild(element)
                     }
-                    // 成功後，再發一個請求，去第一個遊戲那邊拿20個stream
+                    // then, send another request and ask for the top 20 games of the first game from the top five mentioned
                     var request = new XMLHttpRequest();
                     request.open('GET', url + '/streams?game=' + encodeURIComponent(topGames[0]) + '&limit=20', true);
                     request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
                     request.setRequestHeader('Client-ID', 'l2c4tqr5o2nurxv9wccl8ojikzkouz');
 
-                    request.onload = function() {// 若此請求成功，parse所有的response，並1.<h1>新增第一個遊戲名稱 2.把 data.streams丟給一函式
+                    request.onload = function() {
                         if (this.status >= 200 && this.status < 400) {
                             const data = JSON.parse(this.response);
                             document.querySelector('h1').innerText = topGames[0];
@@ -253,21 +251,21 @@
             }; 
             request.send();
 
-            // 接著拿data.streams的各種資料
-            function appendStreams(streams) {//此時 streams 是一個擁有20筆物件的陣列
-                streams.forEach((stream) => {//每一次對一個物件時
-                    let element = document.createElement('div')//都要新增一個 div
-                    let content = template//也要把物件裡的東西取代原本字串
+            // get data.streams and replace the data with the words in template
+            function appendStreams(streams) {
+                streams.forEach((stream) => {
+                    let element = document.createElement('div')
+                    let content = template
                     .replace('$preview', stream.preview.large)
                     .replace('$logo', stream.channel.logo)
                     .replace('$title', stream.channel.status)
                     .replace('$channel', stream.channel.name)
-                    document.querySelector('.main-section-container').appendChild(element)//再把新增的 div 增加到 main-section-container下 (所以有 20 個 div)
-                    element.outerHTML = content//並且讓新增的 div (含標籤本身)被整個 content 取代
+                    document.querySelector('.main-section-container').appendChild(element)
+                    element.outerHTML = content
                 })
             }
 
-            //點選 nav bar 後 先抓到 li 這個 tag 裡面的 text (也就是遊戲名稱），然後把這名稱塞進 h1 裡面，接著先把 main-section-container 的 innerText 都清空，再塞新的所以 stream 也跟著變
+            // handle the event when one of the top-5 games being clicked
             document.querySelector('.navbar_list').addEventListener('click', e => {
                 if (e.target.tagName.toLowerCase() === 'li') {
                     var text = e.target.innerText;
