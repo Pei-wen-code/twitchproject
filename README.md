@@ -1,6 +1,6 @@
 # Twitch project
 
-This is a simpe website built by HTML, CSS  as well as JavaScript. The navigation bar displays the current top 5 games on Twitch and there are 20 livestream pictures of the first games out of the five games will also appear as the main content. Once one of the games in navigation bar is clicked, JavaScript will send a rquest using Ajax to the server, reaching the database of Twitch. The server's response will contain information from teh database that can be collect and replace with the template prepared in JavaScript, leading to different 20 livestream pictures.
+This is a simpe [website](https://pei-wen-code.github.io/twitchproject/) built by HTML, CSS  as well as JavaScript. The navigation bar displays the current top 5 games on Twitch and there are 20 livestream pictures of the first games out of the five games will also appear as the main content. Once one of the games in navigation bar is clicked, JavaScript will send a rquest using Ajax to the server, reaching the database of Twitch. The server's response will contain information from teh database that can be collect and replace with the template prepared in JavaScript, leading to different 20 livestream pictures.
 
 <img width="1408" alt="twitchdemo" src="https://user-images.githubusercontent.com/58638019/131909301-6e2db9b4-dd70-4558-9267-49d5ada4e592.png">
 
